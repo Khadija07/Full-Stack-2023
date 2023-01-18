@@ -1,0 +1,11 @@
+@startuml
+
+actor USER 
+USER -> BROWSER : Enter a new note 
+BROWSER->SERVER: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa, {content: "hello", date: "2023-01-18T18:34:30.252Z"}
+note right of BROWSER : the request also contains the new note as JSON data
+SERVER-->>BROWSER: status code: 201
+note right of BROWSER: the server does not ask the browser for redirect
+
+
+@enduml
