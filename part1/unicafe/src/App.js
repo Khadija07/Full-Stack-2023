@@ -1,5 +1,12 @@
 import { useState } from 'react'
 const Statistics = (props) => {
+  if (props.allClicks.length === 0) {
+    return (
+      <div>
+        No feedback given
+      </div>
+    )
+  }
   return(
     <div>
     <p>good {props.good}</p>
@@ -14,6 +21,7 @@ const Statistics = (props) => {
   
 }
 
+
 const App = () => {
   // save clicks of each button to its own state
 
@@ -21,8 +29,8 @@ const App = () => {
   const [neutral, setNeutral] = useState(0)
   const [bad, setBad] = useState(0) 
   const [total, setTotal] = useState(0)
-  const [average, setAverage] = useState('0')
-  const [positive, setPositive] = useState('0')
+  const [average, setAverage] = useState(0)
+  const [positive, setPositive] = useState(0)
 
   const handleGoodClick = () => {
     const updatedGood = good + 1
