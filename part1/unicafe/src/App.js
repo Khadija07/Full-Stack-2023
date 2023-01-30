@@ -99,8 +99,6 @@ const App = () => {
           </tr>
         </tbody>
       </table>
-
-      
     </div>
   )
 }
