@@ -42,20 +42,34 @@ const App = () => {
     //console.log('badtotal',totalAll)
   }
 
-  const Positive = (props) => {
+
+  const Statistics = (props) => {
+    if(props.all == 0) {
+      return(
+        <div>
+          No feedback given
+        </div>
+      )
+    }
+
     const positive = (props.positive/props.total)*100
-  
+
     return(
       <div>
-         
-        positive {positive} %
+        <p>good {props.good}</p>
+        <p>neutral {props.neutral}</p>
+        <p>bad {props.bad}</p>
+        <p>all {props.all}</p>
+        <p>average {props.average}</p>
+        <p>positive {positive} %</p>
+
       </div>
+
+
     )
 
-
-
-
   }
+
 
   return (
     <div>
@@ -68,12 +82,8 @@ const App = () => {
       
 
       <h1>statistics</h1>
-      <p>good {totalG}</p>
-      <p>neutral {totalN}</p>
-      <p>bad {totalB}</p>
-      <p>all {totalAll}</p>
-      <p>average {average}</p>
-      <Positive positive = {good} total = {totalAll}/>
+      <Statistics good = {totalG} neutral = {totalN} bad = {totalB} all = {totalAll} average = {average} positive = {good} total = {totalAll}/>
+      
     </div>
   )
 }
