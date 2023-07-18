@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import './App.css';
+
 
 const App = () => {
   const [good, setGood] = useState(0)
@@ -53,14 +55,15 @@ const App = () => {
     if (text == 'positive'){
       return(
         <div>
-          {text} {value} %
+          {text} {value} 
+           
         </div>
       )
     }
-    
+
     return(
       <div>
-        <p>{text} {value}</p>
+          {text} {value}
       </div>
     )
 
@@ -80,16 +83,51 @@ const App = () => {
     const positive = (props.positive/props.total)*100
 
     return(
-      <div>
-        <StatisticLine text="good" value ={props.good} />
-        <StatisticLine text="neutral" value ={props.neutral} />
-        <StatisticLine text="bad" value ={props.bad} />
-        <StatisticLine text="all" value ={props.all} />
-        <StatisticLine text="average" value ={props.average} />
-        <StatisticLine text="positive" value ={positive} />
-
-
-      </div>
+    
+        <table>
+          <tbody>
+            
+            <tr>
+              <td><StatisticLine text="good"/></td>
+              <td><StatisticLine value ={props.good} /></td>
+            </tr>
+            <tr>
+      
+              <td><StatisticLine text="neutral"/></td>
+              <td><StatisticLine value ={props.neutral} /></td>
+            </tr>
+            <tr>
+      
+              <td><StatisticLine text="bad"/></td>
+              <td><StatisticLine value ={props.bad} /></td>
+            </tr>
+            <tr>
+      
+              <td><StatisticLine text="all"/></td>
+              <td><StatisticLine value ={props.all} /></td>
+            </tr>
+            <tr>
+      
+              <td><StatisticLine text="average"/></td>
+              <td><StatisticLine value ={props.average} /></td>
+            </tr>
+            <tr>
+      
+              <td><StatisticLine text="positive"/></td>
+              <td><StatisticLine value ={positive} /></td>
+              <td>%</td>
+            </tr>
+          </tbody>
+          
+          
+          {/* <StatisticLine text="bad" value ={props.bad} />
+          <StatisticLine text="all" value ={props.all} />
+          <StatisticLine text="average" value ={props.average} />
+          <StatisticLine text="positive" value ={positive} /> */}
+            
+        
+        </table>
+  
 
 
     )
