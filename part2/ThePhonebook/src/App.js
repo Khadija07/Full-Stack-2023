@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import personService from './services/person'
+import Content from './component/content'
+
 
 const Filter = (props) => {
   return(
@@ -15,20 +18,12 @@ const PersonForm = (props) => {
   return(
     <div>
       name: <input value={props.name} onChange={props.changeName}/> number: <input value={props.number} onChange={props.changeNumber}/>
-
+      
     </div>
     
   )
 }
 
-const Persons = (props) => {
-  return(
-    <div>
-      {props.person.filter(props.filter).map(person => <div key={person.id}>{person.name} {person.number}</div>)}
-
-    </div>
-  )
-}
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -38,11 +33,11 @@ const App = () => {
 
   const hook = () => {
     console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        console.log('promise fulfilled')
-        setPersons(response.data)
+    personService
+      .getAll()
+      .then(initialData => {
+        // console.log('promise fulfilled')
+        setPersons(initialData)
       })
   }
   
@@ -53,7 +48,7 @@ const App = () => {
     const nameObject = {
       name: newName,
       number : numbers,
-      id: persons.length + 1
+      // id: persons.length + 1
     }
     //console.log("id",id)
     if (persons.find((x) => x.name === newName)){
@@ -61,13 +56,28 @@ const App = () => {
 
     }
     else {
-      setPersons(persons.concat(nameObject))
+      personService
+      .create(nameObject)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+      })
+      
       // setNumbers(numbers.concat(nameObject))
     }
-    
     setNewName('')
     setNumbers('')
   }
+
+  // const handleDelete = (id)=> {
+  //   console.log(id)
+  //   personService
+  //   .deletePerson(id)
+  //   .then(() => {
+  //     setPersons(persons.map(n => n.id !== id))
+  //   })
+
+  // }
+
   
   const handleNameChange = (event) => {
     console.log(event.target.value)
@@ -87,7 +97,6 @@ const App = () => {
 
 
 
-
   return (
     <div>
       <h2>Phonebook</h2>
@@ -98,13 +107,14 @@ const App = () => {
       </div>
      
       <form onSubmit={addName}>
-        <PersonForm name = {newName} number = {numbers} changeName = {handleNameChange} changeNumber = {handleNumberChange}/>
+        <PersonForm name = {newName} number = {numbers} changeName = {handleNameChange} changeNumber = {handleNumberChange} />
         <div>
           <button type="submit" >add</button>
         </div>
       </form>
       <h3>Numbers</h3>
-      <Persons person = {persons} filter = {filterName}/>   
+      <Content person = {persons} set = {setPersons} filter = {filterName}/>
+      {/* <Persons person = {persons} filter = {filterName} nameDelete = {<button onClick={() => handleDelete({persons})}>delete</button>} /> */}
     </div>
 
   )
