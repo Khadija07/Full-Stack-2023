@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import personService from './services/person'
 import Content from './component/content'
+import Notification from './component/notification'
+import './index.css'
 
 
 const Filter = (props) => {
@@ -29,6 +31,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [numbers, setNumbers] = useState('')
   const[showName, setShowName] = useState('')
+  const[message, setMessage] = useState('Provide input')
 
   const hook = () => {
     console.log('effect')
@@ -61,7 +64,13 @@ const App = () => {
       if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
         personService
         .update(id, changedNumber)
-        .then(returnedPerson => setPersons(persons.map((person) => person.name != newName ? person : returnedPerson))) 
+        .then(returnedPerson => {
+          setPersons(persons.map((person) => person.name != newName ? person : returnedPerson))
+          setMessage(`The number for ${newName} has been updated.`)
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000)
+        }) 
         .catch(error => {
           alert(
             `the note '${person.name}' was already deleted from server`
@@ -76,7 +85,12 @@ const App = () => {
       .create(nameObject)
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
-      })
+        setMessage(`Added ${newName}`)
+        setTimeout(() => {
+          setMessage(null)
+        }, 5000)
+      }
+      )
       
     }
     setNewName('')
@@ -105,6 +119,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <br />
+      <Notification message={message}/>
      
       <Filter handle = {handleFilterChange} />
       <div>
@@ -117,6 +133,7 @@ const App = () => {
           <button type="submit" >add</button>
         </div>
       </form>
+      
       <h3>Numbers</h3>
       <Content person = {persons} set = {setPersons} filter = {filterName}/>
       {/* <Persons person = {persons} filter = {filterName} nameDelete = {<button onClick={() => handleDelete({persons})}>delete</button>} /> */}
