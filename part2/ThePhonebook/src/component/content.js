@@ -2,7 +2,6 @@ import { useState} from 'react'
 import axios from 'axios'
 
 const Content = (props) => {
-    const[count, setCount] = useState(0)
 
     const NameDelete = ({person}) => {
         console.log("deleted id", person.id)
@@ -13,7 +12,6 @@ const Content = (props) => {
         .then(() => {
             console.log("deleted")
             props.set(props.person.filter(n => n.id !== person.id))
-            setCount(1)
 
           })
           .catch(error => {

@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import personService from './services/person'
 import Content from './component/content'
 
@@ -43,18 +42,35 @@ const App = () => {
   
   useEffect(hook, [])
 
+  
+
   const addName = (event) => {
     event.preventDefault()
     const nameObject = {
       name: newName,
       number : numbers,
-      // id: persons.length + 1
     }
     //console.log("id",id)
-    if (persons.find((x) => x.name === newName)){
-      alert(`${newName} is already added to phonebook`)
+    if(persons.find(x => x.name == newName)){
 
+      const person = persons.find(x => x.name == newName) //data of the person in the server same as newName
+      const id = person.id
+      console.log("name",person)
+      console.log("id",id)
+      const changedNumber = {...person, number : numbers} //exact copy of the person but with only new number
+      if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
+        personService
+        .update(id, changedNumber)
+        .then(returnedPerson => setPersons(persons.map((person) => person.name != newName ? person : returnedPerson))) 
+        .catch(error => {
+          alert(
+            `the note '${person.name}' was already deleted from server`
+          )
+          setPersons(persons.filter(n => n.id !== id))
+        })
+      }
     }
+    
     else {
       personService
       .create(nameObject)
@@ -62,22 +78,11 @@ const App = () => {
         setPersons(persons.concat(returnedPerson))
       })
       
-      // setNumbers(numbers.concat(nameObject))
     }
     setNewName('')
     setNumbers('')
   }
-
-  // const handleDelete = (id)=> {
-  //   console.log(id)
-  //   personService
-  //   .deletePerson(id)
-  //   .then(() => {
-  //     setPersons(persons.map(n => n.id !== id))
-  //   })
-
-  // }
-
+ 
   
   const handleNameChange = (event) => {
     console.log(event.target.value)
