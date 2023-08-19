@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react'
 import personService from './services/person'
 import Content from './component/content'
 import Notification from './component/notification'
+import ErrorMessage from './component/errorMessage'
 import './index.css'
-
 
 const Filter = (props) => {
   return(
@@ -15,23 +15,36 @@ const Filter = (props) => {
   
 }
 
+const Number = (props) => {
+  return(
+    <div>
+      number: <input value={props.number} onChange={props.changeNumber}/>
+    </div>
+
+  )
+  
+
+}
 const PersonForm = (props) => {
   return(
     <div>
-      name: <input value={props.name} onChange={props.changeName}/> number: <input value={props.number} onChange={props.changeNumber}/>
+      name: <input value={props.name} onChange={props.changeName}/>
+      
       
     </div>
     
   )
 }
 
-
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [numbers, setNumbers] = useState('')
   const[showName, setShowName] = useState('')
-  const[message, setMessage] = useState('Provide input')
+  const[message, setMessage] = useState(null)
+  const[errormessage, setErrorMessage] = useState(null)
+
+
 
   const hook = () => {
     console.log('effect')
@@ -58,9 +71,12 @@ const App = () => {
 
       const person = persons.find(x => x.name == newName) //data of the person in the server same as newName
       const id = person.id
+
       console.log("name",person)
       console.log("id",id)
+
       const changedNumber = {...person, number : numbers} //exact copy of the person but with only new number
+
       if(window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)){
         personService
         .update(id, changedNumber)
@@ -72,10 +88,11 @@ const App = () => {
           }, 5000)
         }) 
         .catch(error => {
-          alert(
-            `the note '${person.name}' was already deleted from server`
-          )
+          setErrorMessage(`information of ${person.name} has already been removed from server`)
           setPersons(persons.filter(n => n.id !== id))
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
         })
       }
     }
@@ -115,12 +132,12 @@ const App = () => {
   //console.log(persons.filter(filterName))
 
 
-
   return (
     <div>
       <h2>Phonebook</h2>
       <br />
       <Notification message={message}/>
+      <ErrorMessage message={errormessage}/>
      
       <Filter handle = {handleFilterChange} />
       <div>
@@ -128,7 +145,8 @@ const App = () => {
       </div>
      
       <form onSubmit={addName}>
-        <PersonForm name = {newName} number = {numbers} changeName = {handleNameChange} changeNumber = {handleNumberChange} />
+        <PersonForm name = {newName}  changeName = {handleNameChange}  />
+        <Number number = {numbers} changeNumber = {handleNumberChange}/>
         <div>
           <button type="submit" >add</button>
         </div>
@@ -136,7 +154,6 @@ const App = () => {
       
       <h3>Numbers</h3>
       <Content person = {persons} set = {setPersons} filter = {filterName}/>
-      {/* <Persons person = {persons} filter = {filterName} nameDelete = {<button onClick={() => handleDelete({persons})}>delete</button>} /> */}
     </div>
 
   )
