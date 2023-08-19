@@ -1,10 +1,7 @@
-import { useState} from 'react'
 import axios from 'axios'
-import Notification from './notification'
 
 const Content = (props) => {
 
-  const[errorMessage, setErrorMessage] = useState('')
     const NameDelete = ({person}) => {
         console.log("deleted id", person.id)
         if(window.confirm(`Delete ${person.name} ?`)){
@@ -17,11 +14,8 @@ const Content = (props) => {
 
           })
           .catch(error => {
-            setErrorMessage(`the note '${person.name}' was already deleted from server`)
-            setTimeout(() => {
-              setErrorMessage(null)
-            }, 5000)
-           
+            alert(`information of '${person.name}' has already been removed from server`)
+            
             props.set(props.person.filter(n => n.id !== person.id))
           })
 
@@ -31,9 +25,6 @@ const Content = (props) => {
     return(
         <div>
           {props.person.filter(props.filter).map(person => <div key={person.id}>{person.name} {person.number} {<button onClick={() => NameDelete({person})}>delete</button>}</div>)}
-          <Notification message = {errorMessage} />
-
-          
           
         </div>
       )
