@@ -129,7 +129,7 @@ const App = () => {
     setShowName(event.target.value)
   }
   const filterName = (person) => person.name.toLowerCase().includes(showName.toLowerCase())
-  //console.log(persons.filter(filterName))
+  console.log(persons.filter(filterName))
 
 
   return (
