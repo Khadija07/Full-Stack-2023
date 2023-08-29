@@ -9,7 +9,7 @@ const App = () => {
   const [countryname, setCountryname] = useState('')
 
   useEffect(() => {
-    console.log('effect run, currency is now', countryname)
+    console.log('effect run, country is now', countryname)
 
     // skip if country is not defined
     if (countryname) {
@@ -26,19 +26,23 @@ const App = () => {
   
 
   const onSearch = (event) => {
+    
     setCountryname(event.target.value)
     console.log("countryname",event.target.value)
+
+    
   }
  
   const filterName = (country) => country.name.common.toLowerCase().includes(countryname.toLowerCase())
   console.log("filter",alldata.filter(filterName))
-  
 
+
+  
   return (
     <div>
       find countries <input onChange={onSearch}/>
       <div>
-      <Filter countryName = {alldata.filter(filterName)}/>
+      <Filter countryName = {alldata.filter(filterName)} />
 
       </div>
       
