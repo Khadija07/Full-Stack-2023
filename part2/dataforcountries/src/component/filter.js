@@ -22,9 +22,10 @@ const Filter = ({countryName}) => {
           setLanguage(response.data.languages)
           setFlag(response.data.flags)
           console.log("countryData",countryData)
+          setShowtimer(1)
         })
       
-        setShowtimer(1)
+        
 
     }
     // useEffect(() => {
@@ -33,9 +34,11 @@ const Filter = ({countryName}) => {
 
     //   }
     // })
-    if(showtimer === 1 && countryName.length < 10 ){
+    
+    if(showtimer === 1 && countryName.length >1 && countryName.length < 10 ){
       
       console.log("timer",showtimer)
+      // setShowtimer(0)
         return(
             <div>
                 <p>area {countryData.area}</p>
@@ -57,7 +60,9 @@ const Filter = ({countryName}) => {
         )
         
     }
+    
     if(countryName.length == 0){
+      
       return null
     }
     
@@ -91,7 +96,7 @@ const Filter = ({countryName}) => {
       )
   
     }
-    else if(countryName.length >= 1 && countryName.length <= 10 ){
+    if(countryName.length >= 1 && countryName.length <= 10 ){
     
       console.log("length",countryName.length)
       return(
